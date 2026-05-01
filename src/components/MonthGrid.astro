@@ -1,0 +1,30 @@
+---
+import type { CalendarDay } from "~/lib/calendar";
+import DayCell from "./DayCell.astro";
+import dayjs from "dayjs";
+
+interface Props {
+  year: number;
+  monthIndex: number;
+  days: CalendarDay[];
+  leaveDates: Set<string>;
+}
+const { year, monthIndex, days, leaveDates } = Astro.props;
+
+const monthName = dayjs(`${year}-${String(monthIndex + 1).padStart(2, "0")}-01`).format("MMMM");
+const firstDow = dayjs(days[0]?.date ?? `${year}-01-01`).day();
+const padding = Array.from({ length: firstDow }, () => null);
+---
+
+<div>
+  <h3 class="mb-2 text-sm font-semibold">{monthName}</h3>
+  <div class="grid grid-cols-7 gap-px text-xs">
+    {["S", "M", "T", "W", "T", "F", "S"].map((d) => (
+      <div class="text-center text-gray-400">{d}</div>
+    ))}
+    {padding.map(() => <div />)}
+    {days.map((d) => (
+      <DayCell day={d} isLeave={leaveDates.has(d.date)} />
+    ))}
+  </div>
+</div>

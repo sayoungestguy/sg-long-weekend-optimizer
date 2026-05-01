@@ -1,0 +1,19 @@
+---
+import type { Strategy } from "~/lib/types";
+import StrategyCard from "./StrategyCard.astro";
+
+interface Props {
+  strategies: Strategy[];
+}
+const { strategies } = Astro.props;
+---
+
+{strategies.length === 0 ? (
+  <p class="p-4 text-sm text-gray-600">
+    No strategies yet — implement <code>optimize()</code> in src/lib/optimizer.ts.
+  </p>
+) : (
+  <ul class="grid gap-3 p-4 md:grid-cols-2">
+    {strategies.map((s) => <StrategyCard strategy={s} />)}
+  </ul>
+)}

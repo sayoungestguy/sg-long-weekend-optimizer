@@ -1,0 +1,482 @@
+[
+  {
+    "date": "2020-01-01",
+    "name": "New Year's Day",
+    "year": 2020,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2020-01-25",
+    "name": "",
+    "year": 2020,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2020-01-26",
+    "name": "Chinese New Year",
+    "year": 2020,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2020-04-10",
+    "name": "Good Friday",
+    "year": 2020,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2020-05-01",
+    "name": "Labour Day",
+    "year": 2020,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2020-05-07",
+    "name": "Vesak Day",
+    "year": 2020,
+    "dayOfWeek": 4
+  },
+  {
+    "date": "2020-05-24",
+    "name": "Hari Raya Puasa",
+    "year": 2020,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2020-07-10",
+    "name": "Polling Day",
+    "year": 2020,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2020-07-31",
+    "name": "Hari Raya Haji",
+    "year": 2020,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2020-08-09",
+    "name": "National Day",
+    "year": 2020,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2020-11-14",
+    "name": "Deepavali",
+    "year": 2020,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2020-12-25",
+    "name": "Christmas Day",
+    "year": 2020,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2021-01-01",
+    "name": "New Year's Day",
+    "year": 2021,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2021-02-12",
+    "name": "Chinese New Year",
+    "year": 2021,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2021-02-13",
+    "name": "Chinese New Year",
+    "year": 2021,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2021-04-02",
+    "name": "Good Friday",
+    "year": 2021,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2021-05-01",
+    "name": "Labour Day",
+    "year": 2021,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2021-05-13",
+    "name": "Hari Raya Puasa",
+    "year": 2021,
+    "dayOfWeek": 4
+  },
+  {
+    "date": "2021-05-26",
+    "name": "Vesak Day",
+    "year": 2021,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2021-07-20",
+    "name": "Hari Raya Haji",
+    "year": 2021,
+    "dayOfWeek": 2
+  },
+  {
+    "date": "2021-08-09",
+    "name": "National Day",
+    "year": 2021,
+    "dayOfWeek": 1
+  },
+  {
+    "date": "2021-11-04",
+    "name": "Deepavali",
+    "year": 2021,
+    "dayOfWeek": 4
+  },
+  {
+    "date": "2021-12-25",
+    "name": "Christmas Day",
+    "year": 2021,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2022-01-01",
+    "name": "New Year's Day",
+    "year": 2022,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2022-02-01",
+    "name": "Chinese New Year",
+    "year": 2022,
+    "dayOfWeek": 2
+  },
+  {
+    "date": "2022-02-02",
+    "name": "Chinese New Year",
+    "year": 2022,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2022-04-15",
+    "name": "Good Friday",
+    "year": 2022,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2022-05-01",
+    "name": "Labour Day",
+    "year": 2022,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2022-05-03",
+    "name": "Hari Raya Puasa",
+    "year": 2022,
+    "dayOfWeek": 2
+  },
+  {
+    "date": "2022-05-15",
+    "name": "Vesak Day",
+    "year": 2022,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2022-07-10",
+    "name": "Hari Raya Haji",
+    "year": 2022,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2022-08-09",
+    "name": "National Day",
+    "year": 2022,
+    "dayOfWeek": 2
+  },
+  {
+    "date": "2022-10-24",
+    "name": "Deepavali",
+    "year": 2022,
+    "dayOfWeek": 1
+  },
+  {
+    "date": "2022-12-25",
+    "name": "Christmas Day",
+    "year": 2022,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2023-01-01",
+    "name": "New Year's Day",
+    "year": 2023,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2023-01-22",
+    "name": "Chinese New Year",
+    "year": 2023,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2023-01-23",
+    "name": "Chinese New Year",
+    "year": 2023,
+    "dayOfWeek": 1
+  },
+  {
+    "date": "2023-04-07",
+    "name": "Good Friday",
+    "year": 2023,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2023-04-22",
+    "name": "Hari Raya Puasa",
+    "year": 2023,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2023-05-01",
+    "name": "Labour Day",
+    "year": 2023,
+    "dayOfWeek": 1
+  },
+  {
+    "date": "2023-06-02",
+    "name": "Vesak Day",
+    "year": 2023,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2023-06-29",
+    "name": "Hari Raya Haji",
+    "year": 2023,
+    "dayOfWeek": 4
+  },
+  {
+    "date": "2023-08-09",
+    "name": "National Day",
+    "year": 2023,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2023-09-01",
+    "name": "Polling Day",
+    "year": 2023,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2023-11-12",
+    "name": "Deepavali",
+    "year": 2023,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2023-12-25",
+    "name": "Christmas Day",
+    "year": 2023,
+    "dayOfWeek": 1
+  },
+  {
+    "date": "2024-01-01",
+    "name": "New Year's Day",
+    "year": 2024,
+    "dayOfWeek": 1
+  },
+  {
+    "date": "2024-02-10",
+    "name": "Chinese New Year",
+    "year": 2024,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2024-02-11",
+    "name": "Chinese New Year",
+    "year": 2024,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2024-03-29",
+    "name": "Good Friday",
+    "year": 2024,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2024-04-10",
+    "name": "Hari Raya Puasa",
+    "year": 2024,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2024-05-01",
+    "name": "Labour Day",
+    "year": 2024,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2024-05-22",
+    "name": "Vesak Day",
+    "year": 2024,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2024-06-17",
+    "name": "Hari Raya Haji",
+    "year": 2024,
+    "dayOfWeek": 1
+  },
+  {
+    "date": "2024-08-09",
+    "name": "National Day",
+    "year": 2024,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2024-10-31",
+    "name": "Deepavali",
+    "year": 2024,
+    "dayOfWeek": 4
+  },
+  {
+    "date": "2024-12-25",
+    "name": "Christmas Day",
+    "year": 2024,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2025-01-01",
+    "name": "New Year's Day",
+    "year": 2025,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2025-01-29",
+    "name": "Chinese New Year",
+    "year": 2025,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2025-01-30",
+    "name": "Chinese New Year",
+    "year": 2025,
+    "dayOfWeek": 4
+  },
+  {
+    "date": "2025-03-31",
+    "name": "Hari Raya Puasa",
+    "year": 2025,
+    "dayOfWeek": 1
+  },
+  {
+    "date": "2025-04-18",
+    "name": "Good Friday",
+    "year": 2025,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2025-05-01",
+    "name": "Labour Day",
+    "year": 2025,
+    "dayOfWeek": 4
+  },
+  {
+    "date": "2025-05-03",
+    "name": "Polling Day",
+    "year": 2025,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2025-05-12",
+    "name": "Vesak Day",
+    "year": 2025,
+    "dayOfWeek": 1
+  },
+  {
+    "date": "2025-06-07",
+    "name": "Hari Raya Haji",
+    "year": 2025,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2025-08-09",
+    "name": "National Day",
+    "year": 2025,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2025-10-20",
+    "name": "Deepavali",
+    "year": 2025,
+    "dayOfWeek": 1
+  },
+  {
+    "date": "2025-12-25",
+    "name": "Christmas Day",
+    "year": 2025,
+    "dayOfWeek": 4
+  },
+  {
+    "date": "2026-01-01",
+    "name": "New Year’s Day",
+    "year": 2026,
+    "dayOfWeek": 4
+  },
+  {
+    "date": "2026-02-17",
+    "name": "Chinese New Year",
+    "year": 2026,
+    "dayOfWeek": 2
+  },
+  {
+    "date": "2026-02-18",
+    "name": "Chinese New Year",
+    "year": 2026,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2026-03-21",
+    "name": "Hari Raya Puasa",
+    "year": 2026,
+    "dayOfWeek": 6
+  },
+  {
+    "date": "2026-04-03",
+    "name": "Good Friday",
+    "year": 2026,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2026-05-01",
+    "name": "Labour Day",
+    "year": 2026,
+    "dayOfWeek": 5
+  },
+  {
+    "date": "2026-05-27",
+    "name": "Hari Raya Haji",
+    "year": 2026,
+    "dayOfWeek": 3
+  },
+  {
+    "date": "2026-05-31",
+    "name": "Vesak Day",
+    "year": 2026,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2026-08-09",
+    "name": "National Day",
+    "year": 2026,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2026-11-08",
+    "name": "Deepavali",
+    "year": 2026,
+    "dayOfWeek": 0
+  },
+  {
+    "date": "2026-12-25",
+    "name": "Christmas Day",
+    "year": 2026,
+    "dayOfWeek": 5
+  }
+]

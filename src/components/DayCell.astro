@@ -1,0 +1,25 @@
+---
+import type { CalendarDay } from "~/lib/calendar";
+
+interface Props {
+  day: CalendarDay;
+  isLeave: boolean;
+}
+const { day, isLeave } = Astro.props;
+
+const dayNum = Number(day.date.slice(8, 10));
+const cls = isLeave
+  ? "bg-leave/20 text-leave"
+  : day.kind === "holiday"
+    ? "bg-ph/20 text-ph"
+    : day.kind === "weekend"
+      ? "bg-gray-100 text-weekend"
+      : "bg-white";
+---
+
+<div
+  class={`aspect-square rounded text-center leading-tight p-0.5 ${cls}`}
+  title={day.holidayName ?? ""}
+>
+  {dayNum}
+</div>

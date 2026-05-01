@@ -1,0 +1,52 @@
+---
+interface Props {
+  year: number;
+  leaveBalance: number;
+  includeSaturday: boolean;
+}
+const { year, leaveBalance, includeSaturday } = Astro.props;
+---
+
+<form
+  method="get"
+  action="/"
+  class="sticky top-0 z-10 flex flex-col gap-3 border-b bg-white p-4 sm:flex-row sm:flex-wrap sm:items-end sm:gap-4"
+>
+  <label class="flex flex-col text-sm">
+    Year
+    <select name="year" class="mt-1 rounded border p-1">
+      {[2024, 2025, 2026, 2027].map((y) => (
+        <option value={y} selected={y === year}>{y}</option>
+      ))}
+    </select>
+  </label>
+
+  <label class="flex flex-col text-sm">
+    Leave days
+    <input
+      type="number"
+      name="leave"
+      min="0"
+      max="30"
+      value={leaveBalance}
+      class="mt-1 w-20 rounded border p-1"
+    />
+  </label>
+
+  <label class="flex items-center gap-2 text-sm">
+    <input
+      type="checkbox"
+      name="sat"
+      value="true"
+      checked={includeSaturday}
+    />
+    Saturday is a workday (5.5-day week)
+  </label>
+
+  <button
+    type="submit"
+    class="rounded bg-black px-3 py-1 text-sm text-white"
+  >
+    Update
+  </button>
+</form>

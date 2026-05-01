@@ -1,0 +1,26 @@
+---
+import type { CalendarDay } from "~/lib/calendar";
+import MonthGrid from "./MonthGrid.astro";
+
+interface Props {
+  year: number;
+  days: CalendarDay[];
+  leaveDates: Set<string>;
+}
+const { year, days, leaveDates } = Astro.props;
+
+const months = Array.from({ length: 12 }, (_, m) =>
+  days.filter((d) => Number(d.date.slice(5, 7)) === m + 1),
+);
+---
+
+<section class="grid gap-6 p-4 md:grid-cols-2 lg:grid-cols-3">
+  {months.map((monthDays, i) => (
+    <MonthGrid
+      year={year}
+      monthIndex={i}
+      days={monthDays}
+      leaveDates={leaveDates}
+    />
+  ))}
+</section>

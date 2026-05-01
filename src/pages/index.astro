@@ -1,0 +1,81 @@
+---
+import "~/styles/global.css";
+import OptimizerForm from "~/components/OptimizerForm.astro";
+import StrategyList from "~/components/StrategyList.astro";
+import YearCalendar from "~/components/YearCalendar.astro";
+import { buildYearCalendar } from "~/lib/calendar";
+import { optimize, applySundayObservedRule } from "~/lib/optimizer";
+import type { Holiday } from "~/lib/types";
+import holidaysData from "~/data/holidays-sg.json";
+
+const params = Astro.url.searchParams;
+const year = Number(params.get("year")) || 2026;
+const leaveBalance = Math.max(0, Math.min(60, Number(params.get("leave") ?? 14)));
+const includeSaturday = params.get("sat") === "true";
+
+const yearHolidays = (holidaysData as Holiday[]).filter(
+  (h) => h.year === year,
+);
+const observedHolidays = applySundayObservedRule(yearHolidays);
+const hasData = observedHolidays.length > 0;
+
+const result = optimize(
+  { year, leaveBalance, includeSaturday },
+  observedHolidays,
+);
+const strategies = result.topStrategies;
+const leaveDates = new Set<string>(strategies.flatMap((s) => s.leaveDates));
+const leaveUsed = strategies.reduce((sum, s) => sum + s.leaveDaysUsed, 0);
+
+const days = buildYearCalendar(year, observedHolidays, includeSaturday);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SG Long-Weekend Optimizer</title>
+    <meta
+      name="description"
+      content="Find the optimal way to use your annual leave with Singapore public holidays."
+    />
+  </head>
+  <body class="min-h-screen bg-gray-50 text-gray-900">
+    <header class="border-b bg-white px-4 py-3">
+      <h1 class="text-xl font-bold">SG Long-Weekend Optimizer</h1>
+      <p class="text-sm text-gray-600">
+        Chain your annual leave with Singapore public holidays.
+      </p>
+    </header>
+
+    <OptimizerForm
+      year={year}
+      leaveBalance={leaveBalance}
+      includeSaturday={includeSaturday}
+    />
+
+    {!hasData ? (
+      <p class="p-4 text-sm text-amber-700">
+        No holiday data on file for {year}. The bundled dataset covers 2020–2026.
+      </p>
+    ) : (
+      <p class="px-4 pt-3 text-sm text-gray-700">
+        <strong>{result.totalPossibleDaysOff}</strong> days off using
+        <strong>{leaveUsed}</strong> of {leaveBalance} leave days,
+        across <strong>{strategies.length}</strong> {strategies.length === 1 ? "strategy" : "strategies"}.
+      </p>
+    )}
+
+    <main>
+      <StrategyList strategies={strategies} />
+      <YearCalendar year={year} days={days} leaveDates={leaveDates} />
+    </main>
+
+    <footer class="border-t p-4 text-center text-xs text-gray-500">
+      Not affiliated with the Government of Singapore. Public holiday data from
+      <a href="https://data.gov.sg" class="underline">data.gov.sg</a>.
+      <a href="/about" class="ml-2 underline">About</a>
+    </footer>
+  </body>
+</html>
