@@ -42,6 +42,21 @@ const days = buildYearCalendar(year, observedHolidays, includeSaturday);
       name="description"
       content="Find the optimal way to use your annual leave with Singapore public holidays."
     />
+    <meta property="og:title" content="SG Long-Weekend Optimizer" />
+    <meta
+      property="og:description"
+      content="Turn 14 leave days into 37 days off. Optimal leave-taking strategies around Singapore public holidays."
+    />
+    <meta property="og:image" content="https://sg-long-weekend-optimizer.vercel.app/api/og" />
+    <meta property="og:url" content="https://sg-long-weekend-optimizer.vercel.app/" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SG Long-Weekend Optimizer" />
+    <meta
+      name="twitter:description"
+      content="Turn 14 leave days into 37 days off. Optimal leave-taking strategies around Singapore public holidays."
+    />
+    <meta name="twitter:image" content="https://sg-long-weekend-optimizer.vercel.app/api/og" />
   </head>
   <body class="min-h-screen bg-gray-50 text-gray-900">
     <header class="border-b bg-white px-4 py-3">
@@ -57,42 +72,90 @@ const days = buildYearCalendar(year, observedHolidays, includeSaturday);
       includeSaturday={includeSaturday}
     />
 
-    {!hasData ? (
-      <p class="p-4 text-sm text-amber-700">
-        No holiday data on file for {year}. The bundled dataset covers 2020–2026.
-      </p>
-    ) : (
-      <p class="px-4 pt-3 text-sm text-gray-700">
-        <strong>{result.totalPossibleDaysOff}</strong> days off using
-        <strong>{leaveUsed}</strong> of {leaveBalance} leave days,
-        across <strong>{strategies.length}</strong> {strategies.length === 1 ? "strategy" : "strategies"}.
-      </p>
-    )}
+    <div id="app-results" class="transition-opacity">
+      {!hasData ? (
+        <p class="p-4 text-sm text-amber-700">
+          No holiday data on file for {year}. The bundled dataset covers 2020–2026.
+        </p>
+      ) : (
+        <p class="px-4 pt-3 text-sm text-gray-700">
+          <strong>{result.totalPossibleDaysOff}</strong> days off using
+          <strong>{leaveUsed}</strong> of {leaveBalance} leave days,
+          across <strong>{strategies.length}</strong> {strategies.length === 1 ? "strategy" : "strategies"}.
+        </p>
+      )}
 
-    <main>
-      <StrategyList strategies={strategies} leaveBalance={leaveBalance} />
-      <YearCalendar year={year} days={days} leaveDates={leaveDates} />
-    </main>
+      <main>
+        <StrategyList strategies={strategies} leaveBalance={leaveBalance} />
+        <YearCalendar year={year} days={days} leaveDates={leaveDates} />
+      </main>
+    </div>
 
     <script>
       // Hover-to-highlight: hovering a strategy card outlines its full date
       // range in the calendar so the user can see exactly which days that
-      // strategy covers (PRD §9). Vanilla JS island — no framework runtime.
-      const cards = document.querySelectorAll<HTMLElement>("[data-strategy-dates]");
-      cards.forEach((card) => {
-        const dates = (card.dataset.strategyDates ?? "").split(",").filter(Boolean);
-        const cells = dates
-          .map((d) => document.querySelector<HTMLElement>(`.day-cell[data-date="${d}"]`))
-          .filter((el): el is HTMLElement => el !== null);
-        const setActive = (active: boolean) => {
-          cells.forEach((c) => c.classList.toggle("ring-2", active));
-          cells.forEach((c) => c.classList.toggle("ring-leave", active));
-        };
-        card.addEventListener("mouseenter", () => setActive(true));
-        card.addEventListener("mouseleave", () => setActive(false));
-        card.addEventListener("focusin", () => setActive(true));
-        card.addEventListener("focusout", () => setActive(false));
+      // strategy covers (PRD §9).
+      function bindHoverHighlight() {
+        const cards = document.querySelectorAll<HTMLElement>("[data-strategy-dates]");
+        cards.forEach((card) => {
+          if (card.dataset.hoverBound === "1") return;
+          card.dataset.hoverBound = "1";
+          const dates = (card.dataset.strategyDates ?? "").split(",").filter(Boolean);
+          const setActive = (active: boolean) => {
+            dates.forEach((d) => {
+              const cell = document.querySelector<HTMLElement>(`.day-cell[data-date="${d}"]`);
+              if (!cell) return;
+              cell.classList.toggle("ring-2", active);
+              cell.classList.toggle("ring-leave", active);
+            });
+          };
+          card.addEventListener("mouseenter", () => setActive(true));
+          card.addEventListener("mouseleave", () => setActive(false));
+          card.addEventListener("focusin", () => setActive(true));
+          card.addEventListener("focusout", () => setActive(false));
+        });
+      }
+
+      // Reactive form: intercept submit, fetch the new page, swap just the
+      // #app-results region. PRD acceptance #3/#4 ("updates without page
+      // reload"). Falls back to native navigation if the fetch fails.
+      async function reactiveSubmit(form: HTMLFormElement) {
+        const data = new FormData(form);
+        const params = new URLSearchParams();
+        for (const [k, v] of data.entries()) params.set(k, String(v));
+        const url = "/?" + params.toString();
+        const results = document.getElementById("app-results");
+        if (!results) {
+          window.location.href = url;
+          return;
+        }
+        results.style.opacity = "0.5";
+        try {
+          const res = await fetch(url, { headers: { Accept: "text/html" } });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, "text/html");
+          const next = doc.getElementById("app-results");
+          if (!next) throw new Error("missing #app-results in response");
+          results.replaceWith(next);
+          history.pushState({}, "", url);
+          bindHoverHighlight();
+        } catch (err) {
+          console.warn("reactive submit failed, falling back to navigation", err);
+          window.location.href = url;
+        }
+      }
+
+      const form = document.querySelector<HTMLFormElement>("form[data-reactive]");
+      form?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        reactiveSubmit(form);
       });
+
+      // Back/forward: just reload — simpler than re-fetching, and rare path.
+      window.addEventListener("popstate", () => window.location.reload());
+
+      bindHoverHighlight();
     </script>
 
     <footer class="border-t p-4 text-center text-xs text-gray-500">
