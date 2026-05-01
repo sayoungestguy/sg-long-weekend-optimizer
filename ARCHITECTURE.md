@@ -122,6 +122,34 @@ Playwright sets the viewport via Chrome DevTools Protocol, which honours arbitra
 
 **Lesson:** When a screenshot shows a layout bug, verify the *capture tool* is rendering at the dimensions you asked for *before* you change the page. Costed ~30 minutes of CSS edits and one wrong root-cause attribution.
 
+### Hard problem #6: The Vercel deploy that failed three times in a row
+
+After switching to hybrid SSR with `@astrojs/vercel@7.8.2`, the first Vercel deploy failed with:
+
+```
+The following Serverless Functions contain an invalid "runtime":
+  - _render (nodejs18.x)
+```
+
+Vercel had deprecated the `nodejs18.x` Lambda runtime; any function declaring it gets rejected. The adapter was writing `nodejs18.x` because Vercel's build environment was running Node 18 by default (the project predated Vercel's switch to Node 20+ as the default), and the adapter mirrors the build-time Node version into `.vc-config.json`.
+
+**Attempt 1:** Added `"engines": { "node": ">=20.0.0" }` to `package.json` to force a newer Node. The redeploy failed with the *same* error, plus this warning in the build log:
+
+```
+[WARN] [@astrojs/vercel/serverless]
+The local Node.js version (24) is not supported by Vercel Serverless Functions.
+Your project will use Node.js 18 as the runtime instead.
+Consider switching your local version to 18.
+```
+
+Vercel saw `>=20`, picked the latest available (Node 24). `@astrojs/vercel@7.8.2` is from early 2025 and only knows about Node 18 and 20; it didn't recognise 24 and silently fell back to `nodejs18.x` — the very thing Vercel had just deprecated. The adapter's "graceful fallback" was guaranteed to fail.
+
+**Attempt 2:** Pinned `"node": "20.x"` exactly. Vercel now picks Node 20, the adapter recognises it, writes `nodejs20.x`, deploy succeeds.
+
+**Why this is a portfolio-worthy story:** the bug *looked* like a Vercel config issue (the error came from Vercel) but the root cause was a three-way version compatibility gap between Vercel's runtime support, Astro's adapter version, and the Node version Vercel chose for the build. Each piece made a defensible choice in isolation; combined, they deadlocked. The pin is a workaround. The proper fix is upgrading to Astro 5 + `@astrojs/vercel@8`, which natively supports modern Node — which I'll do before April 2026 when Vercel deprecates Node 20 too.
+
+**Lesson:** When a build tool emits a warning and continues, the warning is the bug. Silent fallbacks to deprecated defaults are strictly worse than hard failures, because they ship and break in the next environment.
+
 ---
 
 ## 3. Trade-offs I Knew I Was Making

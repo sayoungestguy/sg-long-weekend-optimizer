@@ -14,7 +14,7 @@ const months = Array.from({ length: 12 }, (_, m) =>
 );
 ---
 
-<section class="grid gap-6 p-4 md:grid-cols-2 lg:grid-cols-3">
+<section id="calendar" class="grid gap-6 p-4 md:grid-cols-2 lg:grid-cols-3">
   {months.map((monthDays, i) => (
     <MonthGrid
       year={year}
