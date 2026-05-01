@@ -4,14 +4,18 @@ import StrategyCard from "./StrategyCard.astro";
 
 interface Props {
   strategies: Strategy[];
+  leaveBalance: number;
 }
-const { strategies } = Astro.props;
+const { strategies, leaveBalance } = Astro.props;
+
+const emptyMessage =
+  leaveBalance === 0
+    ? "Set a leave balance above to see strategy suggestions. The calendar still shows your free days (weekends + public holidays)."
+    : "No strategies found for this year. Try increasing your leave balance.";
 ---
 
 {strategies.length === 0 ? (
-  <p class="p-4 text-sm text-gray-600">
-    No strategies yet — implement <code>optimize()</code> in src/lib/optimizer.ts.
-  </p>
+  <p class="p-4 text-sm text-gray-600">{emptyMessage}</p>
 ) : (
   <ul class="grid gap-3 p-4 md:grid-cols-2">
     {strategies.map((s) => <StrategyCard strategy={s} />)}

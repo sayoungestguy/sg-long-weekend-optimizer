@@ -18,7 +18,8 @@ const cls = isLeave
 ---
 
 <div
-  class={`aspect-square rounded text-center leading-tight p-0.5 ${cls}`}
+  class={`day-cell aspect-square rounded text-center leading-tight p-0.5 transition ${cls}`}
+  data-date={day.date}
   title={day.holidayName ?? ""}
 >
   {dayNum}

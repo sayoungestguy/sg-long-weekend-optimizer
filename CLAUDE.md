@@ -43,17 +43,19 @@ scripts/
 └── fetch-holidays.ts
 ```
 
-## The algorithm (heuristic, not true optimum)
+## The algorithm (exact DP, not greedy)
 
-Greedy bridge detection. NP-hard in the general case but ~11 PHs/year keeps the search space small enough that the heuristic stays within ~5% of brute-force optimal.
+Originally shipped as a greedy heuristic but the brute-force validator (`bruteForceMaxDaysOff()` in optimizer.ts) caught that on real SG data, greedy was only 75–89% of optimum. Replaced with weighted-interval-scheduling DP — runs in <5ms for SG's ~100 candidates, gives true optimum.
 
 1. Build a 365/366-day calendar marking each day as `weekend | holiday | workday`.
-2. For each PH, examine ±5 days for "bridge candidates" — workdays sandwiched between the PH and the nearest weekend or another PH.
-3. Score each candidate: `efficiency = totalDaysOff / leaveDaysUsed`.
-4. Also generate longer-break candidates (contiguous weekend + PH + ≤5 leave days).
-5. Sort by efficiency desc, tie-break by total days off desc.
-6. Greedy-select non-overlapping strategies until leave is exhausted. **Exclude 0-leave candidates from the greedy pool** — they're factual ("you have a 3-day weekend already"), not strategic, and would otherwise pre-empt better leave-using picks for the same range (e.g. Christmas-alone would block the Thu–Sun bridge that uses Fri leave).
-7. Return top picks plus 2–3 next-best alternates.
+2. Enumerate every (free, free) day pair as a candidate range. Free = weekend or PH.
+3. Compute candidate's `totalDaysOff = end - start + 1`, `leaveDaysUsed = workdays in range`.
+4. Filter to candidates that (a) contain ≥1 PH, (b) have `leaveDaysUsed > 0`, (c) have `leaveDaysUsed ≤ 5`, (d) pass the display filter (`totalDaysOff >= 3 AND (efficiency >= 2.5 OR totalDaysOff >= 5)`).
+5. Sort by `endDate` for the DP.
+6. DP: `f[i][l] = max(f[i-1][l], f[prev(i)][l - cost[i]] + value[i])` where `prev(i)` is the largest j<i with `candidates[j].endDate < candidates[i].startDate` (no overlap).
+7. Backtrack through `f` to recover the selected candidates. Cap displayed results at 10.
+
+**Excluding 0-leave candidates from the pool** is the key correctness trick. They have `Infinity` efficiency (or no leave to use), would always be "selected" with no cost, and would block better leave-using strategies covering the same range (e.g. Christmas-alone would block the Thu–Sun bridge that uses Fri leave). They're factual, not strategic — the calendar still shows the underlying free days.
 
 **Filter rule for what's "worth showing":** `totalDaysOff >= 3 AND (efficiency >= 2.5 OR totalDaysOff >= 5)`. The `totalDaysOff >= 3` floor blocks single-PH "strategies" with `Infinity` efficiency from passing the filter. The `OR totalDaysOff >= 5` clause keeps Easter-style 3-day weekends and longer cluster-bridges visible even when their efficiency dips below 2.5.
 

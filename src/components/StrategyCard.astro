@@ -8,9 +8,26 @@ interface Props {
 const { strategy } = Astro.props;
 
 const fmt = (d: string) => dayjs(d).format("ddd D MMM");
+
+// Enumerate every date in the strategy's contiguous range so the hover
+// island can light up the whole stretch in the calendar, not just the
+// chosen leave days.
+const rangeDates: string[] = [];
+{
+  let d = dayjs(strategy.startDate);
+  const end = dayjs(strategy.endDate);
+  while (d.isBefore(end) || d.isSame(end)) {
+    rangeDates.push(d.format("YYYY-MM-DD"));
+    d = d.add(1, "day");
+  }
+}
 ---
 
-<li class="rounded border p-4 shadow-sm">
+<li
+  class="strategy-card cursor-pointer rounded border p-4 shadow-sm transition hover:border-leave hover:shadow-md"
+  data-strategy-id={strategy.id}
+  data-strategy-dates={rangeDates.join(",")}
+>
   <div class="flex items-baseline justify-between">
     <h3 class="text-lg font-semibold">
       {fmt(strategy.startDate)} – {fmt(strategy.endDate)}

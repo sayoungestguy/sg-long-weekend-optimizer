@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 import "~/styles/global.css";
 import OptimizerForm from "~/components/OptimizerForm.astro";
 import StrategyList from "~/components/StrategyList.astro";
@@ -68,9 +70,30 @@ const days = buildYearCalendar(year, observedHolidays, includeSaturday);
     )}
 
     <main>
-      <StrategyList strategies={strategies} />
+      <StrategyList strategies={strategies} leaveBalance={leaveBalance} />
       <YearCalendar year={year} days={days} leaveDates={leaveDates} />
     </main>
+
+    <script>
+      // Hover-to-highlight: hovering a strategy card outlines its full date
+      // range in the calendar so the user can see exactly which days that
+      // strategy covers (PRD §9). Vanilla JS island — no framework runtime.
+      const cards = document.querySelectorAll<HTMLElement>("[data-strategy-dates]");
+      cards.forEach((card) => {
+        const dates = (card.dataset.strategyDates ?? "").split(",").filter(Boolean);
+        const cells = dates
+          .map((d) => document.querySelector<HTMLElement>(`.day-cell[data-date="${d}"]`))
+          .filter((el): el is HTMLElement => el !== null);
+        const setActive = (active: boolean) => {
+          cells.forEach((c) => c.classList.toggle("ring-2", active));
+          cells.forEach((c) => c.classList.toggle("ring-leave", active));
+        };
+        card.addEventListener("mouseenter", () => setActive(true));
+        card.addEventListener("mouseleave", () => setActive(false));
+        card.addEventListener("focusin", () => setActive(true));
+        card.addEventListener("focusout", () => setActive(false));
+      });
+    </script>
 
     <footer class="border-t p-4 text-center text-xs text-gray-500">
       Not affiliated with the Government of Singapore. Public holiday data from

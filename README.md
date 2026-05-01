@@ -2,19 +2,19 @@
 
 > Find the optimal way to use your annual leave with Singapore public holidays.
 
-<!-- Update once deployed: [Live demo →](https://long-weekend.example.dev) -->
+[Live demo →](https://sg-long-weekend-optimizer.vercel.app)
 
 ![Hero screenshot](docs/hero.png)
 
 ## What it does
 
-Given your annual leave balance and a year, it returns a ranked list of leave-taking strategies that maximise your contiguous days off around Singapore's 11 public holidays. With the default 14 leave days, 2026 yields **33 days off across 5 strategies** — a 2.4× multiplier.
+Given your annual leave balance and a year, it returns a ranked list of leave-taking strategies that maximise your contiguous days off around Singapore's 11 public holidays. With the default 14 leave days, 2026 yields **37 days off across 5 strategies** — a 2.6× multiplier on every leave day used.
 
 ## How it works
 
-For each pair of free days (weekends + public holidays) in the year, the optimizer treats the workdays in between as "leave to take" and scores the resulting range by `totalDaysOff / leaveDaysUsed`. Candidates are ranked by efficiency, then greedy-selected without overlap until the leave budget is exhausted. Sunday public holidays get an observed-Monday entry synthesised at runtime (the data.gov.sg dataset doesn't pre-apply this). 0-leave "strategies" are excluded from the greedy pool — they're factual, not strategic, and would otherwise pre-empt better leave-using picks for the same range.
+For each pair of free days (weekends + public holidays) in the year, the optimizer treats the workdays in between as "leave to take" and scores the resulting range by `totalDaysOff / leaveDaysUsed`. The selection is the **exact optimum** of a weighted-interval scheduling problem with a leave-day budget, solved via O(n²) DP — runs in <5ms. Sunday public holidays get an observed-Monday entry synthesised at runtime (the data.gov.sg dataset doesn't pre-apply this). 0-leave "strategies" are excluded from the candidate pool — they're factual, not strategic, and would otherwise pre-empt better leave-using picks for the same range.
 
-The full algorithm and the four hard problems I hit are in [ARCHITECTURE.md](./ARCHITECTURE.md).
+The full algorithm and the five hard problems I hit (including the discovery that my original greedy heuristic was only ~85% of optimum) are in [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 ## Stack
 

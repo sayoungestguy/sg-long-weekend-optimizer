@@ -13,7 +13,14 @@ const { year, monthIndex, days, leaveDates } = Astro.props;
 
 const monthName = dayjs(`${year}-${String(monthIndex + 1).padStart(2, "0")}-01`).format("MMMM");
 const firstDow = dayjs(days[0]?.date ?? `${year}-01-01`).day();
-const padding = Array.from({ length: firstDow }, () => null);
+const leadingPad = Array.from({ length: firstDow }, () => null);
+
+// Pad trailing cells so every month renders exactly 6 weeks tall.
+// Without this, months that span 6 weeks (e.g. Feb 2026 starting on Sunday)
+// shift the grid layout vs. months that fit in 5.
+const totalCells = 6 * 7;
+const trailingCount = totalCells - leadingPad.length - days.length;
+const trailingPad = Array.from({ length: Math.max(0, trailingCount) }, () => null);
 ---
 
 <div>
@@ -22,9 +29,10 @@ const padding = Array.from({ length: firstDow }, () => null);
     {["S", "M", "T", "W", "T", "F", "S"].map((d) => (
       <div class="text-center text-gray-400">{d}</div>
     ))}
-    {padding.map(() => <div />)}
+    {leadingPad.map(() => <div />)}
     {days.map((d) => (
       <DayCell day={d} isLeave={leaveDates.has(d.date)} />
     ))}
+    {trailingPad.map(() => <div />)}
   </div>
 </div>

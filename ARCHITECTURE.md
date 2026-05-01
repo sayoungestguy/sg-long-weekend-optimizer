@@ -34,15 +34,15 @@
 
 **Trade-off accepted:** Can't store user preferences across sessions. Gained: zero infrastructure, perfect privacy (URL never leaves user's machine until they share), free virality (share the link with your settings already applied).
 
-### Decision: Greedy selection, not true optimum
+### Decision: Exact DP, not greedy heuristic (revised after testing)
 
-**Context:** The optimal-leave-allocation problem is a variant of the set-packing problem — NP-hard in the general case.
+**Context:** The optimal-leave-allocation problem is a variant of the set-packing problem — NP-hard in the general case. I originally shipped a greedy heuristic (sort candidates by `totalDaysOff / leaveDaysUsed` desc, pick non-overlapping under budget) and assumed it would be within ~5% of optimum.
 
-**Choice:** A heuristic that detects "bridge" candidates around each PH, scores by efficiency, and greedily selects without overlap.
+**What I actually found:** When I wrote the brute-force validator (`bruteForceMaxDaysOff()` — DP over the same candidate pool), the greedy was hitting only **75–89% of optimum** on real SG data. With 14 leave days in 2026, greedy returned 33 days off using 12 leave; the DP returned 37 days off using all 14. The greedy was exhausting its budget on small high-efficiency bridges and missing larger combinations.
 
-**Trade-off accepted:** Possibly suboptimal by 1–2 days off in pathological cases. Gained: O(n) instead of O(2ⁿ), runs in <5ms, code is readable.
+**Choice:** Replace the greedy with the DP. Once the candidate pool is filtered (free-day-pair ranges containing ≥1 PH, ≤5 workdays inside), the problem is just weighted-interval scheduling with a budget — `f[i][l] = max(f[i-1][l], f[prev(i)][l - cost[i]] + value[i])`. O(n²) for the `prev` table + O(n × L) for the DP. With n≈100 candidates and L≤30, the whole solve runs in <5ms.
 
-**Why this is defensible:** With ~11 PHs/year, the search space is small enough that the heuristic is provably within ~5% of optimal in practice. I tested by brute-forcing 2026 and comparing.
+**Why this is defensible:** The original greedy's O(n) advantage was meaningless at this scale, and the DP gives true optimum for free. The story isn't "I was clever enough to write the right algorithm first" — it's "I wrote the test that proved my heuristic wasn't good enough, then upgraded the algorithm". That's what tests are for.
 
 ### Decision: No external libraries beyond `dayjs`
 

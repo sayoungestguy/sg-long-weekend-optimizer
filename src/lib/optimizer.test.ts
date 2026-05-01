@@ -1,6 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { optimize, applySundayObservedRule } from "./optimizer";
+import {
+  optimize,
+  applySundayObservedRule,
+  bruteForceMaxDaysOff,
+} from "./optimizer";
 import type { Holiday } from "./types";
+import realHolidays from "../data/holidays-sg.json";
 
 const fixtures: Record<string, Holiday[]> = {
   "2025-christmas": [
@@ -82,4 +87,31 @@ describe("optimizer", () => {
     );
     expect(a).toEqual(b);
   });
+});
+
+describe("optimize() vs brute-force optimum", () => {
+  // Validates the ARCHITECTURE.md §1 claim that the greedy heuristic stays
+  // within ~5% of true optimum on real SG data.
+  const years = [2024, 2025, 2026];
+  const balances = [3, 7, 14, 21];
+
+  for (const year of years) {
+    for (const leaveBalance of balances) {
+      it(`${year} with ${leaveBalance} leave days: heuristic ≥ 95% of optimum`, () => {
+        const yearHolidays = (realHolidays as Holiday[]).filter(
+          (h) => h.year === year,
+        );
+        const heuristic = optimize(
+          { year, leaveBalance, includeSaturday: false },
+          yearHolidays,
+        );
+        const exact = bruteForceMaxDaysOff(
+          { year, leaveBalance, includeSaturday: false },
+          yearHolidays,
+        );
+        const ratio = exact === 0 ? 1 : heuristic.totalPossibleDaysOff / exact;
+        expect(ratio).toBeGreaterThanOrEqual(0.95);
+      });
+    }
+  }
 });
